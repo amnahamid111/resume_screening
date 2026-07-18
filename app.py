@@ -133,4 +133,5 @@ with col2:
     ]
 )
 
-predict = st.button("Predict Candidate")
+if st.button("Predict Candidate"):
+    st.success("Button is working!")
