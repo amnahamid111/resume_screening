@@ -59,6 +59,37 @@ import re
 def extract_education(text):
 
     text = text.lower()
+    def extract_experience(text):
+
+    text = text.lower()
+
+    words_to_numbers = {
+        "one": 1,
+        "two": 2,
+        "three": 3,
+        "four": 4,
+        "five": 5,
+        "six": 6,
+        "seven": 7,
+        "eight": 8,
+        "nine": 9,
+        "ten": 10
+    }
+
+    for word, number in words_to_numbers.items():
+
+        if f"over {word} years" in text:
+            return number
+
+        if f"{word} years" in text:
+            return number
+
+    match = re.search(r'(\d+)\s+years', text)
+
+    if match:
+        return int(match.group(1))
+
+    return 0
 
     if "phd" in text:
         return "PhD"
@@ -103,5 +134,10 @@ if uploaded_file:
 
     st.write("Experience (Years):")
     st.write(experience)
+
+    education = extract_education(resume_text)
+
+    st.write("Education:")
+    st.write(education)
 
     
