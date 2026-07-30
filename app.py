@@ -86,16 +86,35 @@ def extract_experience(text):
 
     text = text.lower()
 
-    match = re.search(
+    patterns = [
         r'(\d+(\.\d+)?)\+?\s*years',
-        text
-    )
+        r'over\s+(\w+)\s+years'
+    ]
+
+    match = re.search(patterns[0], text)
 
     if match:
         return float(match.group(1))
 
-    return 0
+    words = {
+        "one":1,
+        "two":2,
+        "three":3,
+        "four":4,
+        "five":5,
+        "six":6,
+        "seven":7,
+        "eight":8,
+        "nine":9,
+        "ten":10
+    }
 
+    for word, value in words.items():
+
+        if f"over {word} years" in text:
+            return value
+
+    return 0
 
 def extract_education(text):
 
@@ -182,14 +201,14 @@ if uploaded_file:
 
     skill_score = (
         matched / len(required_skills)
-    ) * 70
+    ) * 60
 
     experience_score = min(
-        experience * 5,
-        20
+        experience * 6,
+        30
     )
 
-    education_score = 0
+    education_score = 10
 
     if education == "PhD":
         education_score = 10
@@ -272,6 +291,31 @@ if uploaded_file:
 
     elif final_score >= 50:
         st.warning("⚠ Potential Candidate")
+
+st.markdown("---")
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.subheader("Candidate Summary")
+
+    st.write(f"Experience: {experience} Years")
+    st.write(f"Education: {education}")
+    st.write(f"Skills Found: {len(skills)}")
+
+with col2:
+
+    st.subheader("Recruitment Decision")
+
+    if final_score >= 80:
+        st.success("Highly Recommended")
+
+    elif final_score >= 60:
+        st.warning("Consider for Interview")
+
+    else:
+        st.error("Not Recommended")
 
     else:
         st.error("❌ Not Suitable")
