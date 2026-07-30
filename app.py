@@ -141,4 +141,32 @@ if uploaded_file:
 
     st.write("Education:")
     st.write(education)
+
+    score = 0
+
+score += min(experience * 10, 40)
+
+score += len(skills) * 5
+
+if education == "PhD":
+    score += 30
+elif education == "M.Sc":
+    score += 20
+elif education == "B.Sc":
+    score += 10
+
+score = min(score, 100)
+
+st.subheader("Resume Evaluation Score")
+
+st.progress(score / 100)
+
+st.write(f"Score: {score}%")
+
+if score >= 70:
+    st.success("Recommended for Interview")
+elif score >= 50:
+    st.warning("Potential Candidate")
+else:
+    st.error("Needs Improvement")
     
