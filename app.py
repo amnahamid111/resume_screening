@@ -45,7 +45,24 @@ if uploaded_file:
       resume_text,
       height=300
   )
-
+  skills_list = [
+    "Python",
+    "SQL",
+    "Machine Learning",
+    "TensorFlow",
+    "PyTorch",
+    "AWS",
+    "Docker",
+    "NLP",
+    "Power BI",
+    "Excel",
+    "Customer Service",
+    "Communication",
+    "Microsoft Office",
+    "Data Entry",
+    "Problem Solving",
+    "Team Coordination"
+]
   def extract_skills(text):
     found_skills=[]
     # skills_list is not defined yet, this will cause a NameError if called
