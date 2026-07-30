@@ -9,8 +9,47 @@ Original file is located at
 
 # Commented out IPython magic to ensure Python compatibility.
 import streamlit as st
+import fitz
+import re
 
-st.title("AI Resume Screening System")
+st.set_page_config(
+    page_title="AI Resume Screening System",
+    page_icon="🤖",
+    layout="wide"
+)
+
+st.markdown("""
+<style>
+
+.header-box{
+    background: linear-gradient(90deg,#0F4C81,#1E88E5);
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    color:white;
+    margin-bottom:20px;
+}
+
+.skill-tag{
+    background:#E3F2FD;
+    color:#1565C0;
+    padding:6px 12px;
+    border-radius:15px;
+    margin:3px;
+    display:inline-block;
+    font-size:14px;
+    font-weight:600;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class='header-box'>
+<h1>🤖 AI Resume Screening System</h1>
+<h4>Intelligent Resume Analysis & Candidate Evaluation</h4>
+</div>
+""", unsafe_allow_html=True)
 
 skills_list = [
     "Python",
@@ -31,46 +70,47 @@ skills_list = [
     "Team Coordination"
 ]
 
-import fitz
 def extract_text_from_pdf(uploaded_file):
-  text=""
 
-  pdf=fitz.open(
-      stream=uploaded_file.read(),
-      filetype='pdf'
-  )
-  for page in pdf:
-    text+=page.get_text()
+    text = ""
 
-    # The return statement should be outside the loop to accumulate all text
-  return text
+    pdf = fitz.open(
+        stream=uploaded_file.read(),
+        filetype="pdf"
+    )
+
+    for page in pdf:
+        text += page.get_text()
+
+    return text
+
 
 def extract_skills(text):
-    found_skills=[]
-    # skills_list is not defined yet, this will cause a NameError if called
-    # For now, let's assume it will be defined or passed as an argument.
-    for skill in skills_list:
-      if skill.lower() in text.lower():
-         found_skills.append(skill)
-    return found_skills
 
-import re
+    found_skills = []
+
+    for skill in skills_list:
+
+        if skill.lower() in text.lower():
+            found_skills.append(skill)
+
+    return found_skills
 
 def extract_experience(text):
 
     text = text.lower()
 
     words_to_numbers = {
-        "one": 1,
-        "two": 2,
-        "three": 3,
-        "four": 4,
-        "five": 5,
-        "six": 6,
-        "seven": 7,
-        "eight": 8,
-        "nine": 9,
-        "ten": 10
+        "one":1,
+        "two":2,
+        "three":3,
+        "four":4,
+        "five":5,
+        "six":6,
+        "seven":7,
+        "eight":8,
+        "nine":9,
+        "ten":10
     }
 
     for word, number in words_to_numbers.items():
@@ -108,65 +148,134 @@ def extract_education(text):
     return "Unknown"
 
 
+job_skills = {
+
+    "Data Scientist": [
+        "Python",
+        "SQL",
+        "Machine Learning",
+        "Power BI"
+    ],
+
+    "Software Engineer": [
+        "Python",
+        "SQL",
+        "Docker"
+    ],
+
+    "AI Researcher": [
+        "Python",
+        "TensorFlow",
+        "PyTorch",
+        "NLP"
+    ],
+
+    "Customer Service Representative": [
+        "Customer Service",
+        "Communication",
+        "Microsoft Office"
+    ]
+}
+job_role = st.selectbox(
+    "Select Job Role",
+    list(job_skills.keys())
+)
+
 uploaded_file = st.file_uploader(
-    "Upload Resume (PDF)",
+    "📄 Upload Resume (PDF)",
     type=["pdf"]
 )
 
 if uploaded_file:
 
-    st.success("Resume uploaded successfully")
+    st.success("✅ Resume uploaded successfully")
 
     resume_text = extract_text_from_pdf(uploaded_file)
 
-    st.subheader("Extracted Resume Text")
-
-    st.text_area(
-        "Resume Content",
-        resume_text,
-        height=300
-    )
-
     skills = extract_skills(resume_text)
-
-    st.write("Skills Found:")
-    st.write(skills)
 
     experience = extract_experience(resume_text)
 
-    st.write("Experience (Years):")
-    st.write(experience)
-
     education = extract_education(resume_text)
 
-    st.write("Education:")
-    st.write(education)
+    required_skills = job_skills[job_role]
 
-    score = 0
+    matched = 0
 
-    score += min(experience * 10, 40)
+    for skill in required_skills:
 
-    score += len(skills) * 5
+        if skill in skills:
+            matched += 1
 
-    if education == "PhD":
-        score += 30
-    elif education == "M.Sc":
-        score += 20
-    elif education == "B.Sc":
-        score += 10
+    match_score = int(
+        (matched / len(required_skills)) * 100
+    )
 
-    score = min(score, 100)
+    col1, col2, col3, col4 = st.columns(4)
 
-    st.subheader("Resume Evaluation Score")
+    with col1:
+        st.metric(
+            "📅 Experience",
+            f"{experience} Years"
+        )
 
-    st.progress(score / 100)
+    with col2:
+        st.metric(
+            "🎓 Education",
+            education
+        )
 
-    st.write(f"Score: {score}%")
+    with col3:
+        st.metric(
+            "🛠 Skills",
+            len(skills)
+        )
 
-    if score >= 70:
-        st.success("Recommended for Interview")
-    elif score >= 50:
-        st.warning("Potential Candidate")
+    with col4:
+        st.metric(
+            "🎯 Job Match",
+            f"{match_score}%"
+        )
+
+    st.markdown("---")
+
+    st.subheader("🛠 Skills Detected")
+
+    skills_html = ""
+
+    for skill in skills:
+        skills_html += f"<span class='skill-tag'>{skill}</span> "
+
+    st.markdown(
+        skills_html,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("---")
+
+    st.subheader("📋 Required Skills")
+
+    st.write(required_skills)
+
+    st.markdown("---")
+
+    st.subheader("📊 Candidate Evaluation")
+
+    st.progress(match_score / 100)
+
+    if match_score >= 75:
+        st.success("✅ Recommended for Interview")
+
+    elif match_score >= 50:
+        st.warning("⚠ Potential Candidate")
+
     else:
-        st.error("Needs Improvement")
-    
+        st.error("❌ Not Suitable For This Job")
+
+    with st.expander("📄 View Extracted Resume Text"):
+
+        st.text_area(
+            "Resume Content",
+            resume_text,
+            height=300
+        )
