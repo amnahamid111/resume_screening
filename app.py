@@ -77,3 +77,29 @@ if uploaded_file:
 
     st.write("Skills Found:")
     st.write(skills)
+
+import re
+
+def extract_experience(text):
+
+    text = text.lower()
+
+    patterns = [
+        r'(\d+)\s+years',
+        r'(\d+)\s+year',
+        r'over\s+(\d+)\s+years',
+        r'more than\s+(\d+)\s+years'
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, text)
+
+        if match:
+            return int(match.group(1))
+
+    return 0
+    
+    experience = extract_experience(resume_text)
+
+    st.write("Experience (Years):")
+    st.write(experience)
