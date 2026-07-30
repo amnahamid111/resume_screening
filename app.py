@@ -8,36 +8,116 @@ Original file is located at
 """
 
 # Commented out IPython magic to ensure Python compatibility.
-skill_score = (
-    matched / len(required_skills)
-) * 70
+import streamlit as st
+import fitz
+import re
 
-experience_score = min(
-    experience * 5,
-    20
+st.set_page_config(
+    page_title="AI Resume Screening System",
+    page_icon="🤖",
+    layout="wide"
 )
 
-education_score = 0
+st.markdown("""
+<style>
+.header-box{
+    background: linear-gradient(90deg,#0F4C81,#1E88E5);
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    color:white;
+    margin-bottom:20px;
+}
 
-if education == "PhD":
-    education_score = 10
+.skill-tag{
+    background:#E3F2FD;
+    color:#1565C0;
+    padding:6px 12px;
+    border-radius:15px;
+    margin:3px;
+    display:inline-block;
+}
+</style>
+""", unsafe_allow_html=True)
 
-elif education in ["M.Sc", "M.Tech"]:
-    education_score = 8
+st.markdown("""
+<div class='header-box'>
+<h1>🤖 AI Resume Screening System</h1>
+<h4>Resume Analysis & Candidate Evaluation</h4>
+</div>
+""", unsafe_allow_html=True)
 
-elif education in ["B.Sc", "B.E"]:
-    education_score = 5
+skills_list = [
+    "Python","SQL","Machine Learning","TensorFlow",
+    "PyTorch","AWS","Docker","NLP","Power BI",
+    "Excel","Customer Service","Communication",
+    "Microsoft Office","Data Entry",
+    "Problem Solving","Team Coordination"
+]
 
-final_score = int(
-    skill_score +
-    experience_score +
-    education_score
-)
+def extract_text_from_pdf(uploaded_file):
 
-final_score = min(
-    final_score,
-    100
-)
+    text = ""
+
+    pdf = fitz.open(
+        stream=uploaded_file.read(),
+        filetype="pdf"
+    )
+
+    for page in pdf:
+        text += page.get_text()
+
+    return text
+
+
+def extract_skills(text):
+
+    found_skills = []
+
+    for skill in skills_list:
+
+        if skill.lower() in text.lower():
+            found_skills.append(skill)
+
+    return found_skills
+
+
+def extract_experience(text):
+
+    text = text.lower()
+
+    match = re.search(
+        r'(\d+(\.\d+)?)\+?\s*years',
+        text
+    )
+
+    if match:
+        return float(match.group(1))
+
+    return 0
+
+
+def extract_education(text):
+
+    text = text.lower()
+
+    if "phd" in text:
+        return "PhD"
+
+    elif "m.sc" in text or "msc" in text:
+        return "M.Sc"
+
+    elif "m.tech" in text:
+        return "M.Tech"
+
+    elif "bachelor of engineering" in text or "b.e" in text:
+        return "B.E"
+
+    elif "bachelor" in text or "b.sc" in text or "bsc" in text:
+        return "B.Sc"
+
+    return "Unknown"
+
 job_skills = {
 
     "Data Scientist": [
@@ -73,13 +153,11 @@ job_role = st.selectbox(
 )
 
 uploaded_file = st.file_uploader(
-    "📄 Upload Resume (PDF)",
+    "📄 Upload Resume",
     type=["pdf"]
 )
 
 if uploaded_file:
-
-    st.success("✅ Resume uploaded successfully")
 
     resume_text = extract_text_from_pdf(uploaded_file)
 
@@ -97,6 +175,10 @@ if uploaded_file:
 
         if skill in skills:
             matched += 1
+
+    match_percentage = int(
+        (matched / len(required_skills)) * 100
+    )
 
     skill_score = (
         matched / len(required_skills)
@@ -124,60 +206,47 @@ if uploaded_file:
         education_score
     )
 
-    final_score = min(
-        final_score,
-        100
-    )
-
-    match_percentage = int(
-        (matched / len(required_skills)) * 100
-    )
+    final_score = min(final_score, 100)
 
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         st.metric(
-            "📅 Experience",
+            "Experience",
             f"{experience} Years"
         )
 
     with col2:
         st.metric(
-            "🎓 Education",
+            "Education",
             education
         )
 
     with col3:
         st.metric(
-            "🛠 Skills Found",
+            "Skills Found",
             len(skills)
         )
 
     with col4:
         st.metric(
-            "🎯 Job Match",
+            "Final Score",
             f"{final_score}%"
         )
 
     st.markdown("---")
 
-    st.subheader("🛠 Skills Detected")
-
-    skills_html = ""
+    st.subheader("Skills Detected")
 
     for skill in skills:
-        skills_html += (
-            f"<span class='skill-tag'>{skill}</span> "
+        st.markdown(
+            f"<span class='skill-tag'>{skill}</span>",
+            unsafe_allow_html=True
         )
-
-    st.markdown(
-        skills_html,
-        unsafe_allow_html=True
-    )
 
     st.markdown("---")
 
-    st.subheader("📋 Required Skills Match")
+    st.subheader("Required Skills Match")
 
     for skill in required_skills:
 
@@ -186,65 +255,31 @@ if uploaded_file:
         else:
             st.error(f"✗ {skill}")
 
-    st.subheader("📈 Match Summary")
+    st.subheader("Match Summary")
 
-    c1, c2, c3 = st.columns(3)
+    st.write(
+        f"Matched Skills: {matched}/{len(required_skills)}"
+    )
 
-    with c1:
-        st.metric(
-            "Matched Skills",
-            f"{matched}/{len(required_skills)}"
-        )
-
-    with c2:
-        st.metric(
-            "Skills Found",
-            len(skills)
-        )
-
-    with c3:
-        st.metric(
-            "Skill Match %",
-            f"{match_percentage}%"
-        )
-
-    st.markdown("---")
-
-    st.subheader("📊 Candidate Evaluation")
+    st.write(
+        f"Skill Match: {match_percentage}%"
+    )
 
     st.progress(final_score / 100)
 
-    st.metric(
-        "Final Candidate Score",
-        f"{final_score}%"
-    )
-
     if final_score >= 75:
-
-        st.success(
-            "✅ Recommended for Interview"
-        )
+        st.success("✅ Recommended for Interview")
 
     elif final_score >= 50:
-
-        st.warning(
-            "⚠ Potential Candidate"
-        )
+        st.warning("⚠ Potential Candidate")
 
     else:
+        st.error("❌ Not Suitable")
 
-        st.error(
-            "❌ Not Suitable For This Job"
-        )
-
-    st.markdown("---")
-
-    with st.expander(
-        "📄 View Extracted Resume Text"
-    ):
+    with st.expander("View Resume Text"):
 
         st.text_area(
             "Resume Content",
             resume_text,
-            height=350
+            height=300
         )
