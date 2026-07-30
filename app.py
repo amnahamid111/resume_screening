@@ -47,7 +47,7 @@ def extract_text_from_pdf(uploaded_file):
     # The return statement should be outside the loop to accumulate all text
   return text
 
-  def extract_skills(text):
+def extract_skills(text):
     found_skills=[]
     # skills_list is not defined yet, this will cause a NameError if called
     # For now, let's assume it will be defined or passed as an argument.
