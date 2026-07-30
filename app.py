@@ -109,13 +109,13 @@ if uploaded_file:
 
     education_score = 0
 
-     if education == "PhD":
+    if education == "PhD":
         education_score = 10
 
-     elif education in ["M.Sc", "M.Tech"]:
+    elif education in ["M.Sc", "M.Tech"]:
         education_score = 8
 
-     elif education in ["B.Sc", "B.E"]:
+    elif education in ["B.Sc", "B.E"]:
         education_score = 5
 
     final_score = int(
