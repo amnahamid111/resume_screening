@@ -237,8 +237,8 @@ if uploaded_file:
 
     with col3:
         st.metric(
-            "🛠 Skills Found",
-            len(skills)
+            "🛠 Relevant Skills",
+            matched
         )
 
     with col4:
@@ -272,6 +272,12 @@ if uploaded_file:
 
         else:
             st.error(f"✗ {skill}")
+
+    st.subheader("📈 Match Summary")
+
+    st.write(f"Matched Skills: {matched}")
+    st.write(f"Required Skills: {len(required_skills)}")
+    st.write(f"Match Percentage: {match_score}%")
 
     st.markdown("---")
 
