@@ -8,47 +8,11 @@ Original file is located at
 """
 
 # Commented out IPython magic to ensure Python compatibility.
-# %pip install streamlit
-# %pip install PyMuPDF
+%pip install streamlit
+%pip install PyMuPDF
 import streamlit as st
 
 st.title("AI Resume Screening System")
-
-uploaded_file = st.file_uploader(
-    "Upload Resume (PDF)",
-    type=["pdf"]
-)
-
-if uploaded_file:
-    st.success("Resume uploaded successfully")
-
-import fitz
-def extract_text_from_pdf(uploaded_file):
-  text=""
-
-  pdf=fitz.open(
-      stream=uploaded_file.read(),
-      filetype='pdf'
-  )
-  for page in pdf:
-    text+=page.get_text()
-
-    # The return statement should be outside the loop to accumulate all text
-  return text
-
-if uploaded_file:
-  resume_text=extract_text_from_pdf(uploaded_file)
-  st.subheader('Extracted Resume Text')
-
-  st.text_area(
-      'Resume Content',
-      resume_text,
-      height=300
-  )
-   skills=extract_skills(resume_text)
-  
-   st.write("Skills Found:")
-   st.write(skills)
 
 skills_list = [
     "Python",
@@ -68,15 +32,48 @@ skills_list = [
     "Problem Solving",
     "Team Coordination"
 ]
-def extract_skills(text):
+
+import fitz
+def extract_text_from_pdf(uploaded_file):
+  text=""
+
+  pdf=fitz.open(
+      stream=uploaded_file.read(),
+      filetype='pdf'
+  )
+  for page in pdf:
+    text+=page.get_text()
+
+    # The return statement should be outside the loop to accumulate all text
+  return text
+
+  def extract_skills(text):
     found_skills=[]
     # skills_list is not defined yet, this will cause a NameError if called
     # For now, let's assume it will be defined or passed as an argument.
     for skill in skills_list:
-        if skill.lower() in text.lower():
-           found_skills.append(skills)
+      if skill.lower() in text.lower():
+         found_skills.append(skill)
     return found_skills
 
-  skills=extract_skills(resume_text)
-  st.write("Skills Found:")
-  st.write(skills)
+uploaded_file = st.file_uploader(
+    "Upload Resume (PDF)",
+    type=["pdf"]
+)
+
+if uploaded_file:
+    st.success("Resume uploaded successfully")
+
+    resume_text=extract_text_from_pdf(uploaded_file)
+    st.subheader('Extracted Resume Text')
+
+    st.text_area(
+      'Resume Content',
+      resume_text,
+      height=300
+  )
+
+    skills=extract_skills(resume_text)
+  
+    st.write("Skills Found:")
+    st.write(skills)
