@@ -124,16 +124,16 @@ if uploaded_file:
 
 skills = extract_skills(resume_text)
 
-st.write("Skills Found:")
-st.write(skills)
+    st.write("Skills Found:")
+    st.write(skills)
 
 experience = extract_experience(resume_text)
 
-st.write("Experience (Years):")
-st.write(experience)
+    st.write("Experience (Years):")
+    st.write(experience)
 
 education = extract_education(resume_text)
 
-st.write("Education:")
-st.write(education)
+    st.write("Education:")
+    st.write(education)
     
