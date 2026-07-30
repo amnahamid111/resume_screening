@@ -107,7 +107,7 @@ def extract_education(text):
     "Upload Resume (PDF)",
     type=["pdf"]
 
-if uploaded_file:
+    if uploaded_file:
     st.success("Resume uploaded successfully")
 
     resume_text=extract_text_from_pdf(uploaded_file)
