@@ -77,6 +77,10 @@ if uploaded_file:
 
     st.write("Skills Found:")
     st.write(skills)
+     experience = extract_experience(resume_text)
+
+    st.write("Experience (Years):")
+    st.write(experience)
 
 import re
 
@@ -99,7 +103,3 @@ def extract_experience(text):
 
     return 0
     
-    experience = extract_experience(resume_text)
-
-    st.write("Experience (Years):")
-    st.write(experience)
