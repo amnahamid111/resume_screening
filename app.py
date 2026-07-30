@@ -106,7 +106,6 @@ def extract_education(text):
     return "Unknown"
     "Upload Resume (PDF)",
     type=["pdf"]
-)
 
 if uploaded_file:
     st.success("Resume uploaded successfully")
