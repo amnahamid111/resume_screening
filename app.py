@@ -148,7 +148,7 @@ if uploaded_file:
 
     score += len(skills) * 5
 
-     if education == "PhD":
+    if education == "PhD":
       score += 30
     elif education == "M.Sc":
       score += 20
