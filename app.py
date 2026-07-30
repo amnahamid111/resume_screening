@@ -104,7 +104,4 @@ if uploaded_file:
     st.write("Experience (Years):")
     st.write(experience)
 
-    education = extract_education(resume_text)
-
-    st.write("Education:")
-    st.write(education)
+    
