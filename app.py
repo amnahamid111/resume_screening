@@ -296,7 +296,7 @@ if uploaded_file:
 
     col1, col2 = st.columns(2)
 
-with col1:
+ with col1:
 
     st.subheader("Candidate Summary")
 
@@ -304,15 +304,15 @@ with col1:
     st.write(f"Education: {education}")
     st.write(f"Skills Found: {len(skills)}")
 
-with col2:
+ with col2:
 
     st.subheader("Recruitment Decision")
 
-    if final_score >= 80:
-        st.success("✅ Highly Recommended")
+    if final_score >= 75:
+        st.success("✅ Recommended for Interview")
 
-    elif final_score >= 60:
-        st.warning("⚠ Consider for Interview")
+    elif final_score >= 50:
+        st.warning("⚠ Potential Candidate")
 
     else:
-        st.error("❌ Not Recommended")
+        st.error("❌ Not Suitable For This Job")
