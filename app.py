@@ -215,9 +215,25 @@ if uploaded_file:
         if skill in skills:
             matched += 1
 
-    match_score = int(
-        (matched / len(required_skills)) * 100
-    )
+    skill_score = (matched / len(required_skills)) * 70
+
+    experience_score = min(experience * 5, 20)
+
+    education_score = 0
+    if education == "PhD":
+        education_score = 10
+    elif education in ["M.Sc", "M.Tech"]:
+        education_score = 8
+    elif education in ["B.Sc", "B.E"]:
+        education_score = 5
+
+    final_score = int(
+        skill_score +
+        experience_score +
+        education_score
+)
+
+    final_score = min(final_score, 100)
 
     col1, col2, col3, col4 = st.columns(4)
 
