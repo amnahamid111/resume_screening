@@ -88,7 +88,6 @@ def extract_text_from_pdf(uploaded_file):
 
     return text
 
-
 def extract_skills(text):
 
     found_skills = []
@@ -135,7 +134,6 @@ def extract_experience(text):
 
     return 0
 
-
 def extract_education(text):
 
     text = text.lower()
@@ -149,14 +147,13 @@ def extract_education(text):
     elif "m.tech" in text:
         return "M.Tech"
 
+    elif "bachelor of engineering" in text or "b.e" in text:
+        return "B.E"
+
     elif "bachelor" in text or "b.sc" in text or "bsc" in text:
         return "B.Sc"
 
-    elif "b.e" in text or "be " in text:
-        return "B.E"
-
     return "Unknown"
-
 
 job_skills = {
 
@@ -186,6 +183,7 @@ job_skills = {
         "Microsoft Office"
     ]
 }
+
 job_role = st.selectbox(
     "Select Job Role",
     list(job_skills.keys())
@@ -237,8 +235,8 @@ if uploaded_file:
 
     with col3:
         st.metric(
-            "🛠 Relevant Skills",
-            matched
+            "🛠 Skills Found",
+            len(skills)
         )
 
     with col4:
@@ -269,14 +267,13 @@ if uploaded_file:
 
         if skill in skills:
             st.success(f"✓ {skill}")
-
         else:
             st.error(f"✗ {skill}")
 
     st.subheader("📈 Match Summary")
 
-    st.write(f"Matched Skills: {matched}")
-    st.write(f"Required Skills: {len(required_skills)}")
+    st.write(f"Matched Skills: {matched}/{len(required_skills)}")
+    st.write(f"Total Skills Found: {len(skills)}")
     st.write(f"Match Percentage: {match_score}%")
 
     st.markdown("---")
