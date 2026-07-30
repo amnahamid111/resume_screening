@@ -56,37 +56,6 @@ def extract_skills(text):
 
 import re
 
-def extract_experience(text):
-
-    text = text.lower()
-
-    words_to_numbers = {
-        "one": 1,
-        "two": 2,
-        "three": 3,
-        "four": 4,
-        "five": 5,
-        "six": 6,
-        "seven": 7,
-        "eight": 8,
-        "nine": 9,
-        "ten": 10
-    }
-
-    for word, number in words_to_numbers.items():
-        if f"over {word} years" in text:
-            return number
-
-        if f"{word} years" in text:
-            return number
-
-    match = re.search(r'(\d+)\s+years', text)
-
-    if match:
-        return int(match.group(1))
-
-    return 0
-
 def extract_education(text):
 
     text = text.lower()
@@ -104,27 +73,33 @@ def extract_education(text):
         return "B.Sc"
 
     return "Unknown"
+
+
+uploaded_file = st.file_uploader(
     "Upload Resume (PDF)",
     type=["pdf"]
+)
 
-    if uploaded_file:
-       st.success("Resume uploaded successfully")
+if uploaded_file:
 
-       resume_text=extract_text_from_pdf(uploaded_file)
-       st.subheader('Extracted Resume Text')
+    st.success("Resume uploaded successfully")
 
-       st.text_area(
-        'Resume Content',
-         resume_text,
-         height=300
-  )
+    resume_text = extract_text_from_pdf(uploaded_file)
 
-    skills=extract_skills(resume_text)
+    st.subheader("Extracted Resume Text")
+
+    st.text_area(
+        "Resume Content",
+        resume_text,
+        height=300
+    )
+
+    skills = extract_skills(resume_text)
 
     st.write("Skills Found:")
     st.write(skills)
 
-    experience=extract_experience(resume_text)
+    experience = extract_experience(resume_text)
 
     st.write("Experience (Years):")
     st.write(experience)
@@ -133,5 +108,3 @@ def extract_education(text):
 
     st.write("Education:")
     st.write(education)
-
-    
