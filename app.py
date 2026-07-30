@@ -51,6 +51,10 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+st.info(
+    "Upload a PDF Resume. The system extracts skills, experience, education and evaluates job suitability."
+)
+
 skills_list = [
     "Python",
     "SQL",
@@ -100,6 +104,14 @@ def extract_experience(text):
 
     text = text.lower()
 
+    match = re.search(
+        r'(\d+(\.\d+)?)\+?\s*years',
+        text
+    )
+
+    if match:
+        return float(match.group(1))
+
     words_to_numbers = {
         "one":1,
         "two":2,
@@ -121,11 +133,6 @@ def extract_experience(text):
         if f"{word} years" in text:
             return number
 
-    match = re.search(r'(\d+)\s+years', text)
-
-    if match:
-        return int(match.group(1))
-
     return 0
 
 
@@ -144,6 +151,9 @@ def extract_education(text):
 
     elif "bachelor" in text or "b.sc" in text or "bsc" in text:
         return "B.Sc"
+
+    elif "b.e" in text or "be " in text:
+        return "B.E"
 
     return "Unknown"
 
@@ -227,7 +237,7 @@ if uploaded_file:
 
     with col3:
         st.metric(
-            "🛠 Skills",
+            "🛠 Skills Found",
             len(skills)
         )
 
@@ -253,9 +263,15 @@ if uploaded_file:
 
     st.markdown("---")
 
-    st.subheader("📋 Required Skills")
+    st.subheader("📋 Required Skills Match")
 
-    st.write(required_skills)
+    for skill in required_skills:
+
+        if skill in skills:
+            st.success(f"✓ {skill}")
+
+        else:
+            st.error(f"✗ {skill}")
 
     st.markdown("---")
 
@@ -272,10 +288,12 @@ if uploaded_file:
     else:
         st.error("❌ Not Suitable For This Job")
 
+    st.markdown("---")
+
     with st.expander("📄 View Extracted Resume Text"):
 
         st.text_area(
             "Resume Content",
             resume_text,
-            height=300
+            height=350
         )
