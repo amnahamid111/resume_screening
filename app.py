@@ -77,7 +77,6 @@ if uploaded_file:
     st.write(skills)
     
     experience=extract_experience(resume_text)
-
     st.write("Experience (Years):")
     st.write(experience)
 
