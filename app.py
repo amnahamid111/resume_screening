@@ -292,9 +292,9 @@ if uploaded_file:
     elif final_score >= 50:
         st.warning("⚠ Potential Candidate")
 
-st.markdown("---")
+    st.markdown("---")
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
 with col1:
 
