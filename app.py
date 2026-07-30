@@ -45,6 +45,11 @@ if uploaded_file:
       resume_text,
       height=300
   )
+   skills=extract_skills(resume_text)
+  
+   st.write("Skills Found:")
+   st.write(skills)
+
 skills_list = [
     "Python",
     "SQL",
