@@ -108,15 +108,15 @@ def extract_education(text):
     type=["pdf"]
 
     if uploaded_file:
-    st.success("Resume uploaded successfully")
+       st.success("Resume uploaded successfully")
 
-    resume_text=extract_text_from_pdf(uploaded_file)
-    st.subheader('Extracted Resume Text')
+       resume_text=extract_text_from_pdf(uploaded_file)
+       st.subheader('Extracted Resume Text')
 
-    st.text_area(
-      'Resume Content',
-      resume_text,
-      height=300
+       st.text_area(
+        'Resume Content',
+         resume_text,
+         height=300
   )
 
     skills=extract_skills(resume_text)
