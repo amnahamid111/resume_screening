@@ -59,9 +59,6 @@ import re
 def extract_education(text):
 
     text = text.lower()
-    def extract_experience(text):
-
-    text = text.lower()
 
     words_to_numbers = {
         "one": 1,
