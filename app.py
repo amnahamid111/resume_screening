@@ -45,7 +45,7 @@ if uploaded_file:
       resume_text,
       height=300
   )
-  skills_list = [
+skills_list = [
     "Python",
     "SQL",
     "Machine Learning",
@@ -63,13 +63,13 @@ if uploaded_file:
     "Problem Solving",
     "Team Coordination"
 ]
-  def extract_skills(text):
+def extract_skills(text):
     found_skills=[]
     # skills_list is not defined yet, this will cause a NameError if called
     # For now, let's assume it will be defined or passed as an argument.
     for skill in skills_list:
-      if skill.lower() in text.lower():
-         found_skills.append(skills)
+        if skill.lower() in text.lower():
+           found_skills.append(skills)
     return found_skills
 
   skills=extract_skills(resume_text)
