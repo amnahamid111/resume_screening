@@ -258,7 +258,7 @@ if uploaded_file:
     with col4:
         st.metric(
             "🎯 Job Match",
-            f"{match_score}%"
+            f"{final_score}%"
         )
 
     st.markdown("---")
@@ -297,7 +297,7 @@ with col2:
     st.metric("Skills Found", len(skills))
 
 with col3:
-    st.metric("Match %", f"{match_score}%")
+    st.metric("Match %", f"{final_score}%")
 
     st.markdown("---")
 
