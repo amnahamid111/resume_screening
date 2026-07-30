@@ -56,7 +56,7 @@ def extract_skills(text):
 
 import re
 
-def extract_education(text):
+def extract_experience(text):
 
     text = text.lower()
 
@@ -87,6 +87,11 @@ def extract_education(text):
         return int(match.group(1))
 
     return 0
+
+
+def extract_education(text):
+
+    text = text.lower()
 
     if "phd" in text:
         return "PhD"
