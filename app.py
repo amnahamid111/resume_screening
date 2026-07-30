@@ -272,9 +272,16 @@ if uploaded_file:
 
     st.subheader("📈 Match Summary")
 
-    st.write(f"Matched Skills: {matched}/{len(required_skills)}")
-    st.write(f"Total Skills Found: {len(skills)}")
-    st.write(f"Match Percentage: {match_score}%")
+    col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("Matched Skills", f"{matched}/{len(required_skills)}")
+
+with col2:
+    st.metric("Skills Found", len(skills))
+
+with col3:
+    st.metric("Match %", f"{match_score}%")
 
     st.markdown("---")
 
