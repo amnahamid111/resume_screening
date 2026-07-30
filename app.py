@@ -122,17 +122,17 @@ if uploaded_file:
         height=300
     )
 
-skills = extract_skills(resume_text)
+    skills = extract_skills(resume_text)
 
     st.write("Skills Found:")
     st.write(skills)
 
-experience = extract_experience(resume_text)
+    experience = extract_experience(resume_text)
 
     st.write("Experience (Years):")
     st.write(experience)
 
-education = extract_education(resume_text)
+    education = extract_education(resume_text)
 
     st.write("Education:")
     st.write(education)
