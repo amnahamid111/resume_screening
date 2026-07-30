@@ -292,21 +292,22 @@ if uploaded_file:
     elif final_score >= 50:
         st.warning("⚠ Potential Candidate")
 
-    st.markdown("---")
+st.markdown("---")
 
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
- with col1:
+with col1:
 
-    st.subheader("Candidate Summary")
+    st.subheader("📋 Candidate Summary")
 
     st.write(f"Experience: {experience} Years")
     st.write(f"Education: {education}")
     st.write(f"Skills Found: {len(skills)}")
+    st.write(f"Matched Skills: {matched}/{len(required_skills)}")
 
- with col2:
+with col2:
 
-    st.subheader("Recruitment Decision")
+    st.subheader("🎯 Recruitment Decision")
 
     if final_score >= 75:
         st.success("✅ Recommended for Interview")
@@ -316,3 +317,13 @@ if uploaded_file:
 
     else:
         st.error("❌ Not Suitable For This Job")
+
+st.markdown("---")
+
+with st.expander("📄 View Resume Text"):
+
+    st.text_area(
+        "Resume Content",
+        resume_text,
+        height=300
+    )
