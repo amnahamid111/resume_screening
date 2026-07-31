@@ -294,8 +294,8 @@ if uploaded_file:
 
 st.markdown("---")
 
-   col1, col2 = st.columns(2)
-    with col1:
+col1, col2 = st.columns(2)
+with col1:
 
        st.subheader("📋 Candidate Summary")
 
@@ -303,7 +303,7 @@ st.markdown("---")
        st.write(f"Education: {education}")
        st.write(f"Skills Found: {len(skills)}")
        st.write(f"Matched Skills: {matched}/{len(required_skills)}")
-    with col2:
+with col2:
 
        st.subheader("🎯 Recruitment Decision")
 
